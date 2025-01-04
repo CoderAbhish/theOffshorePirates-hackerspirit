@@ -1,0 +1,120 @@
+<!-- Pages/Tickets/Index.cshtml -->
+@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Tickets";
+}
+
+<div class="container">
+    <h2 class="mb-4">Tickets Dashboard</h2>
+    
+    <div class="row mb-4">
+        <div class="col">
+            <a asp-page="./Create" class="btn btn-primary">Create New Ticket</a>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Title</th>
+                            <th>Type</th>
+                            <th>Status</th>
+                            <th>Level</th>
+                            <th>Created</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var ticket in Model.Tickets)
+                        {
+                            <tr>
+                                <td>@ticket.Id</td>
+                                <td>@ticket.Title</td>
+                                <td>@ticket.Type</td>
+                                <td>
+                                    <span class="badge bg-@Model.GetStatusBadgeColor(ticket.Status)">
+                                        @ticket.Status
+                                    </span>
+                                </td>
+                                <td>@ticket.CurrentLevel</td>
+                                <td>@ticket.CreatedAt.ToShortDateString()</td>
+                                <td>
+                                    <a asp-page="./Details" asp-route-id="@ticket.Id" class="btn btn-sm btn-info">View</a>
+                                    <a asp-page="./Edit" asp-route-id="@ticket.Id" class="btn btn-sm btn-warning">Edit</a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Pages/Tickets/Create.cshtml -->
+@page
+@model CreateModel
+@{
+    ViewData["Title"] = "Create Ticket";
+}
+
+<div class="container">
+    <h2 class="mb-4">Create New Ticket</h2>
+
+    <div class="card">
+        <div class="card-body">
+            <form method="post">
+                <div class="mb-3">
+                    <label asp-for="Ticket.Title" class="form-label">Title</label>
+                    <input asp-for="Ticket.Title" class="form-control" required />
+                    <span asp-validation-for="Ticket.Title" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="Ticket.Description" class="form-label">Description</label>
+                    <textarea asp-for="Ticket.Description" class="form-control" rows="4" required></textarea>
+                    <span asp-validation-for="Ticket.Description" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="Ticket.Type" class="form-label">Ticket Type</label>
+                    <select asp-for="Ticket.Type" asp-items="Html.GetEnumSelectList<TicketType>()" class="form-select" required>
+                        <option value="">Select Type</option>
+                    </select>
+                    <span asp-validation-for="Ticket.Type" class="text-danger"></span>
+                </div>
+
+                <div id="courseSection" class="mb-3" style="display: none;">
+                    <label asp-for="Ticket.CourseId" class="form-label">Course</label>
+                    <select asp-for="Ticket.CourseId" asp-items="Model.CourseList" class="form-select">
+                        <option value="">Select Course</option>
+                    </select>
+                </div>
+
+                <button type="submit" class="btn btn-primary">Create Ticket</button>
+                <a asp-page="./Index" class="btn btn-secondary">Cancel</a>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function() {
+            $('#Ticket_Type').change(function() {
+                if ($(this).val() === '@TicketType.CourseRelated.ToString()') {
+                    $('#courseSection').show();
+                    $('#Ticket_CourseId').prop('required', true);
+                } else {
+                    $('#courseSection').hide();
+                    $('#Ticket_CourseId').prop('required', false);
+                }
+            });
+        });
+    </script>
+}

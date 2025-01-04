@@ -1,0 +1,100 @@
+/* wwwroot/css/ticketing.css */
+.ticket-card {
+    transition: transform 0.2s;
+    margin-bottom: 1rem;
+}
+
+.ticket-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.status-badge {
+    font-size: 0.875rem;
+    padding: 0.25rem 0.5rem;
+    border-radius: 0.25rem;
+}
+
+.comment-section {
+    max-height: 400px;
+    overflow-y: auto;
+}
+
+.comment-bubble {
+    background-color: #f8f9fa;
+    border-radius: 1rem;
+    padding: 1rem;
+    margin-bottom: 1rem;
+}
+
+.comment-bubble.self {
+    background-color: #e3f2fd;
+}
+
+.level-indicator {
+    display: inline-block;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    text-align: center;
+    line-height: 24px;
+    font-size: 0.75rem;
+    color: white;
+    margin-right: 0.5rem;
+}
+
+/* Level indicator colors */
+.level-L1 { background-color: #4caf50; }
+.level-L2 { background-color: #2196f3; }
+.level-L3 { background-color: #ff9800; }
+.level-L4 { background-color: #f44336; }
+
+/* wwwroot/js/ticketing.js */
+function initializeTicketSystem() {
+    // Initialize tooltips
+    const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+    tooltipTriggerList.map(function (tooltipTriggerEl) {
+        return new bootstrap.Tooltip(tooltipTriggerEl);
+    });
+
+    // Comment form handling
+    const commentForm = document.getElementById('commentForm');
+    if (commentForm) {
+        commentForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const formData = new FormData(commentForm);
+            try {
+                const response = await fetch(commentForm.action, {
+                    method: 'POST',
+                    body: formData
+                });
+                if (response.ok) {
+                    location.reload();
+                }
+            } catch (error) {
+                console.error('Error submitting comment:', error);
+            }
+        });
+    }
+
+    // Ticket escalation handling
+    const escalateButtons = document.querySelectorAll('.escalate-ticket');
+    escalateButtons.forEach(button => {
+        button.addEventListener('click', async () => {
+            const ticketId = button.dataset.ticketId;
+            try {
+                const response = await fetch(`/api/tickets/${ticketId}/escalate`, {
+                    method: 'POST'
+                });
+                if (response.ok) {
+                    location.reload();
+                }
+            } catch (error) {
+                console.error('Error escalating ticket:', error);
+            }
+        });
+    });
+}
+
+// Initialize when document is ready
+document.addEventListener('DOMContentLoaded', initializeTicketSystem);

@@ -1,0 +1,29 @@
+{
+  "Files": [
+    {
+      "Id": "D:\\IITM\\Margazi 2025\\HackSpirit\\src\\Repos\\theOffshorePirates-hackerspirit\\StudySyncIITM\\TicketingService\\wwwroot\\student-ticketing-static-files.css",
+      "PackagePath": "staticwebassets\\student-ticketing-static-files.css"
+    },
+    {
+      "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.TicketingService.Microsoft.AspNetCore.StaticWebAssetEndpoints.props",
+      "PackagePath": "build\\Microsoft.AspNetCore.StaticWebAssetEndpoints.props"
+    },
+    {
+      "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.TicketingService.Microsoft.AspNetCore.StaticWebAssets.props",
+      "PackagePath": "build\\Microsoft.AspNetCore.StaticWebAssets.props"
+    },
+    {
+      "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.build.TicketingService.props",
+      "PackagePath": "build\\TicketingService.props"
+    },
+    {
+      "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.buildMultiTargeting.TicketingService.props",
+      "PackagePath": "buildMultiTargeting\\TicketingService.props"
+    },
+    {
+      "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.buildTransitive.TicketingService.props",
+      "PackagePath": "buildTransitive\\TicketingService.props"
+    }
+  ],
+  "ElementsToRemove": []
+}

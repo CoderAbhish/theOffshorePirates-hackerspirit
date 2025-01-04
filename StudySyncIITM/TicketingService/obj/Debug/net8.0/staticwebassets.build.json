@@ -1,0 +1,125 @@
+{
+  "Version": 1,
+  "Hash": "p089wQ3HKhoxxQHcaSTep7X2yjdOvd0gy30P5NVmsmU=",
+  "Source": "TicketingService",
+  "BasePath": "_content/TicketingService",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [
+    {
+      "Name": "TicketingService\\wwwroot",
+      "Source": "TicketingService",
+      "ContentRoot": "D:\\IITM\\Margazi 2025\\HackSpirit\\src\\Repos\\theOffshorePirates-hackerspirit\\StudySyncIITM\\TicketingService\\wwwroot\\",
+      "BasePath": "_content/TicketingService",
+      "Pattern": "**"
+    }
+  ],
+  "Assets": [
+    {
+      "Identity": "D:\\IITM\\Margazi 2025\\HackSpirit\\src\\Repos\\theOffshorePirates-hackerspirit\\StudySyncIITM\\TicketingService\\wwwroot\\student-ticketing-static-files.css",
+      "SourceId": "TicketingService",
+      "SourceType": "Discovered",
+      "ContentRoot": "D:\\IITM\\Margazi 2025\\HackSpirit\\src\\Repos\\theOffshorePirates-hackerspirit\\StudySyncIITM\\TicketingService\\wwwroot\\",
+      "BasePath": "_content/TicketingService",
+      "RelativePath": "student-ticketing-static-files#[.{fingerprint}]?.css",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "Fingerprint": "e7ibo0wr48",
+      "Integrity": "6ggm9E/FnhVV9mw12IuebGJIN/c5SE70lwU2zKeHJs4=",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\student-ticketing-static-files.css"
+    }
+  ],
+  "Endpoints": [
+    {
+      "Route": "student-ticketing-static-files.css",
+      "AssetFile": "D:\\IITM\\Margazi 2025\\HackSpirit\\src\\Repos\\theOffshorePirates-hackerspirit\\StudySyncIITM\\TicketingService\\wwwroot\\student-ticketing-static-files.css",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "2703"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/css"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"6ggm9E/FnhVV9mw12IuebGJIN/c5SE70lwU2zKeHJs4=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Sat, 04 Jan 2025 11:01:22 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "no-cache"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-6ggm9E/FnhVV9mw12IuebGJIN/c5SE70lwU2zKeHJs4="
+        }
+      ]
+    },
+    {
+      "Route": "student-ticketing-static-files.e7ibo0wr48.css",
+      "AssetFile": "D:\\IITM\\Margazi 2025\\HackSpirit\\src\\Repos\\theOffshorePirates-hackerspirit\\StudySyncIITM\\TicketingService\\wwwroot\\student-ticketing-static-files.css",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "2703"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/css"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"6ggm9E/FnhVV9mw12IuebGJIN/c5SE70lwU2zKeHJs4=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Sat, 04 Jan 2025 11:01:22 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "e7ibo0wr48"
+        },
+        {
+          "Name": "label",
+          "Value": "student-ticketing-static-files.css"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-6ggm9E/FnhVV9mw12IuebGJIN/c5SE70lwU2zKeHJs4="
+        }
+      ]
+    }
+  ]
+}

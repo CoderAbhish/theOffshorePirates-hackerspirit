@@ -1,0 +1,16 @@
+﻿<Project>
+  <ItemGroup>
+    <StaticWebAssetEndpoint Include="_content/TicketingService/student-ticketing-static-files.css">
+      <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\student-ticketing-static-files.css'))</AssetFile>
+      <Selectors><![CDATA[[]]]></Selectors>
+      <EndpointProperties><![CDATA[[{"Name":"integrity","Value":"sha256-6ggm9E/FnhVV9mw12IuebGJIN/c5SE70lwU2zKeHJs4="}]]]></EndpointProperties>
+      <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"no-cache"},{"Name":"Content-Length","Value":"2703"},{"Name":"Content-Type","Value":"text/css"},{"Name":"ETag","Value":"\u00226ggm9E/FnhVV9mw12IuebGJIN/c5SE70lwU2zKeHJs4=\u0022"},{"Name":"Last-Modified","Value":"Sat, 04 Jan 2025 11:01:22 GMT"}]]]></ResponseHeaders>
+    </StaticWebAssetEndpoint>
+    <StaticWebAssetEndpoint Include="_content/TicketingService/student-ticketing-static-files.e7ibo0wr48.css">
+      <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\student-ticketing-static-files.css'))</AssetFile>
+      <Selectors><![CDATA[[]]]></Selectors>
+      <EndpointProperties><![CDATA[[{"Name":"fingerprint","Value":"e7ibo0wr48"},{"Name":"integrity","Value":"sha256-6ggm9E/FnhVV9mw12IuebGJIN/c5SE70lwU2zKeHJs4="},{"Name":"label","Value":"_content/TicketingService/student-ticketing-static-files.css"}]]]></EndpointProperties>
+      <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"max-age=31536000, immutable"},{"Name":"Content-Length","Value":"2703"},{"Name":"Content-Type","Value":"text/css"},{"Name":"ETag","Value":"\u00226ggm9E/FnhVV9mw12IuebGJIN/c5SE70lwU2zKeHJs4=\u0022"},{"Name":"Last-Modified","Value":"Sat, 04 Jan 2025 11:01:22 GMT"}]]]></ResponseHeaders>
+    </StaticWebAssetEndpoint>
+  </ItemGroup>
+</Project>

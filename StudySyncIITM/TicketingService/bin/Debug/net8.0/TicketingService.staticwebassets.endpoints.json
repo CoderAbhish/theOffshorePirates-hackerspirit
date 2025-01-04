@@ -1,0 +1,88 @@
+{
+  "Version": 1,
+  "ManifestType": "Build",
+  "Endpoints": [
+    {
+      "Route": "student-ticketing-static-files.css",
+      "AssetFile": "student-ticketing-static-files.css",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "no-cache"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "2703"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/css"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"6ggm9E/FnhVV9mw12IuebGJIN/c5SE70lwU2zKeHJs4=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Sat, 04 Jan 2025 11:01:22 GMT"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-6ggm9E/FnhVV9mw12IuebGJIN/c5SE70lwU2zKeHJs4="
+        }
+      ]
+    },
+    {
+      "Route": "student-ticketing-static-files.e7ibo0wr48.css",
+      "AssetFile": "student-ticketing-static-files.css",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "2703"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/css"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"6ggm9E/FnhVV9mw12IuebGJIN/c5SE70lwU2zKeHJs4=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Sat, 04 Jan 2025 11:01:22 GMT"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "e7ibo0wr48"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-6ggm9E/FnhVV9mw12IuebGJIN/c5SE70lwU2zKeHJs4="
+        },
+        {
+          "Name": "label",
+          "Value": "student-ticketing-static-files.css"
+        }
+      ]
+    }
+  ]
+}
