@@ -1,217 +1,176 @@
-// Initialize dummy data
-const dummyTickets = [
-    { id: "TK001", created: "2025-01-03", status: "open", title: "Python Assignment Help" },
-    { id: "TK002", created: "2025-01-02", status: "resolved", title: "Stats Quiz Issue" },
-    { id: "TK003", created: "2025-01-01", status: "pending", title: "Payment Confirmation" }
+// Theme Toggle
+const themeToggle = document.querySelector('.theme-toggle');
+const body = document.body;
+
+themeToggle.addEventListener('click', () => {
+    body.classList.toggle('dark-mode');
+    localStorage.setItem('theme', body.classList.contains('dark-mode') ? 'dark' : 'light');
+});
+
+// Load saved theme
+if (localStorage.getItem('theme') === 'dark') {
+    body.classList.add('dark-mode');
+}
+
+// Sample ticket data with doubt descriptions
+const tickets = [
+    { 
+        id: "TKT-001", 
+        priority: "P1", 
+        course: "Python", 
+        status: "open",
+        doubt: "I'm having trouble understanding list comprehensions in Python. When I try to use nested if conditions, it doesn't work as expected. Here's my code: [x for x in range(10) if x > 5 if x < 8]. Can you help explain where I'm going wrong?",
+        attachments: ["code-snippet.py"]
+    },
+    { 
+        id: "TKT-002", 
+        priority: "P2", 
+        course: "Statistics", 
+        status: "in-progress",
+        doubt: "Could you explain the difference between population variance and sample variance? I'm confused about when to use n-1 in the denominator.",
+        attachments: []
+    },
+    { 
+        id: "TKT-003", 
+        priority: "P1", 
+        course: "Mathematics", 
+        status: "resolved",
+        doubt: "In linear algebra, I'm struggling with eigenvalue calculations. How do we determine if a matrix is diagonalizable?",
+        attachments: ["matrix.jpg"]
+    }
 ];
 
-// DOM Elements
-const ticketsList = document.getElementById('tickets-list');
-const userManual = document.getElementById('user-manual');
-const ticketForm = document.getElementById('ticket-form');
-const incidentForm = document.getElementById('incident-form');
-const raiseTicketBtn = document.getElementById('raise-ticket');
-const raiseIncidentBtn = document.getElementById('raise-incident');
-const themeToggle = document.getElementById('theme-toggle');
+// Filter functionality
+const filterBtn = document.getElementById('filterBtn');
+const filterPanel = document.getElementById('filterPanel');
 
-// Theme Toggle
-themeToggle.addEventListener('click', () => {
-    document.body.classList.toggle('dark-mode');
-    const icon = themeToggle.querySelector('i');
-    if (document.body.classList.contains('dark-mode')) {
-        icon.classList.replace('fa-moon', 'fa-sun');
-    } else {
-        icon.classList.replace('fa-sun', 'fa-moon');
-    }
-    localStorage.setItem('theme', document.body.classList.contains('dark-mode') ? 'dark' : 'light');
+filterBtn.addEventListener('click', () => {
+    filterPanel.classList.toggle('active');
 });
 
-// Initialize theme from localStorage
-if (localStorage.getItem('theme') === 'dark') {
-    document.body.classList.add('dark-mode');
-    themeToggle.querySelector('i').classList.replace('fa-moon', 'fa-sun');
-}
+// Apply filters
+document.querySelector('.apply-filters').addEventListener('click', () => {
+    const selectedPriorities = [...document.querySelectorAll('.filter-section input[type="checkbox"]:checked')]
+        .map(checkbox => checkbox.value);
+    
+    const filteredTickets = tickets.filter(ticket => {
+        const priorityMatch = selectedPriorities.length === 0 || selectedPriorities.includes(ticket.priority.toLowerCase());
+        // Add more filter conditions as needed
+        return priorityMatch;
+    });
 
-// Display tickets in sidebar
-function displayTickets() {
-    ticketsList.innerHTML = dummyTickets.map(ticket => `
-        <div class="ticket-item">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
-                <span style="font-weight: 500;">${ticket.id}</span>
-                <span class="status ${ticket.status.toLowerCase()}">${ticket.status}</span>
-            </div>
-            <div style="font-size: 0.875rem; color: var(--secondary-color);">${ticket.title}</div>
-            <div style="font-size: 0.75rem; color: var(--secondary-color); margin-top: 0.5rem;">
-                ${new Date(ticket.created).toLocaleDateString()}
-            </div>
-        </div>
-    `).join('');
-}
+    renderTickets(filteredTickets);
+    filterPanel.classList.remove('active');
+});
 
-// Show/Hide forms with animations
-// Show/Hide forms with animations
-function hideAllForms() {
-    const forms = [ticketForm, incidentForm];
-    forms.forEach(form => {
-        if (!form.classList.contains('hidden')) {
-            form.style.animation = 'slideIn 0.3s ease-out reverse';
-            setTimeout(() => {
-                form.classList.add('hidden');
-            }, 300);
-        }
+// Render tickets
+function renderTickets(ticketsToRender) {
+    const ticketsList = document.getElementById('ticketsList');
+    ticketsList.innerHTML = '';
+
+    ticketsToRender.forEach(ticket => {
+        const ticketElement = document.createElement('div');
+        ticketElement.className = 'ticket-row';
+        ticketElement.innerHTML = `
+            <div class="table-column">${ticket.id}</div>
+            <div class="table-column">${ticket.priority}</div>
+            <div class="table-column">${ticket.course}</div>
+            <div class="table-column">
+                <span class="status-badge status-${ticket.status}">${ticket.status}</span>
+            </div>
+        `;
+
+        ticketElement.addEventListener('click', () => openReplyModal(ticket));
+        ticketsList.appendChild(ticketElement);
     });
 }
 
-function showTicketForm() {
-    // First hide any visible forms including incident form
-    hideAllForms();
-    
-    // Then hide the user manual if visible
-    if (!userManual.classList.contains('hidden')) {
-        userManual.style.animation = 'fadeIn 0.3s ease-out reverse';
-        setTimeout(() => {
-            userManual.classList.add('hidden');
-        }, 300);
-    }
-    
-    // Finally show the ticket form
-    setTimeout(() => {
-        ticketForm.classList.remove('hidden');
-        ticketForm.style.animation = 'slideIn 0.3s ease-out';
-    }, 300);
-}
+// Modal functionality
+const modal = document.getElementById('replyModal');
+const closeModal = document.querySelector('.close-modal');
+let currentTicket = null;
 
-function showIncidentForm() {
-    // First hide any visible forms including ticket form
-    hideAllForms();
+function openReplyModal(ticket) {
+    currentTicket = ticket;
+    modal.classList.add('active');
+    document.getElementById('ticketId').textContent = ticket.id;
     
-    // Then hide the user manual if visible
-    if (!userManual.classList.contains('hidden')) {
-        userManual.style.animation = 'fadeIn 0.3s ease-out reverse';
-        setTimeout(() => {
-            userManual.classList.add('hidden');
-        }, 300);
-    }
+    // Update doubt description
+    document.querySelector('.ticket-query').textContent = ticket.doubt;
     
-    // Finally show the incident form
-    setTimeout(() => {
-        incidentForm.classList.remove('hidden');
-        incidentForm.style.animation = 'slideIn 0.3s ease-out';
-    }, 300);
-}
-
-function showUserManual() {
-    // Hide all forms first
-    hideAllForms();
+    // Update attachments
+    const attachmentsContainer = document.querySelector('.attachments');
+    attachmentsContainer.innerHTML = '';
     
-    // Then show the user manual
-    setTimeout(() => {
-        userManual.classList.remove('hidden');
-        userManual.style.animation = 'fadeIn 0.3s ease-out';
-    }, 300);
-}
-// Button click handlers
-raiseTicketBtn.addEventListener('click', showTicketForm);
-raiseIncidentBtn.addEventListener('click', showIncidentForm);
-
-// File upload handlers
-function handleFileUpload(input, nameElement) {
-    const maxSize = 5 * 1024 * 1024; // 5MB
-    const file = input.files[0];
-    
-    if (file) {
-        if (file.size > maxSize) {
-            showNotification('File size should not exceed 5MB', 'error');
-            input.value = '';
-            nameElement.textContent = '';
-            return;
-        }
-        nameElement.textContent = file.name;
-    } else {
-        nameElement.textContent = '';
+    if (ticket.attachments && ticket.attachments.length > 0) {
+        const attachmentsList = document.createElement('div');
+        attachmentsList.classList.add('attachments-list');
+        
+        ticket.attachments.forEach(attachment => {
+            const attachmentItem = document.createElement('div');
+            attachmentItem.classList.add('attachment-item');
+            attachmentItem.innerHTML = `
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M21.44 11.05l-9.19 9.19a6 6 0 01-8.49-8.49l9.19-9.19a4 4 0 015.66 5.66l-9.2 9.19a2 2 0 01-2.83-2.83l8.49-8.48"/>
+                </svg>
+                <span>${attachment}</span>
+            `;
+            attachmentsList.appendChild(attachmentItem);
+        });
+        
+        attachmentsContainer.appendChild(attachmentsList);
     }
 }
 
-document.getElementById('attachment').addEventListener('change', function() {
-    handleFileUpload(this, document.getElementById('file-name'));
+closeModal.addEventListener('click', () => {
+    modal.classList.remove('active');
+    currentTicket = null;
 });
 
-document.getElementById('incident-attachment').addEventListener('change', function() {
-    handleFileUpload(this, document.getElementById('incident-file-name'));
+// Submit reply
+document.querySelector('.submit-reply').addEventListener('click', () => {
+    const replyText = document.getElementById('replyText').value;
+    if (!replyText.trim()) return;
+
+    // Update ticket status
+    if (currentTicket) {
+        currentTicket.status = 'resolved';
+        renderTickets(tickets);
+    }
+
+    // Clear and close modal
+    document.getElementById('replyText').value = '';
+    modal.classList.remove('active');
 });
 
-// Form submissions with proper reset and animation
-function handleFormSubmission(e, formType) {
-    e.preventDefault();
-    const formData = new FormData(e.target);
-    const newTicket = {
-        id: `${formType}${String(dummyTickets.length + 1).padStart(3, '0')}`,
-        created: new Date().toISOString().split('T')[0],
-        status: 'pending',
-        title: formData.get('description').slice(0, 50) + '...'
-    };
-    
-    // Add new ticket to the list
-    dummyTickets.unshift(newTicket);
-    displayTickets();
-    
-    // Reset the form
-    e.target.reset();
-    
-    // Reset file upload display
-    const fileNameElement = document.getElementById(formType === 'TK' ? 'file-name' : 'incident-file-name');
-    if (fileNameElement) {
-        fileNameElement.textContent = '';
-    }
-    
-    // Show success notification
-    showNotification('Your ticket has been submitted successfully', 'success');
-    
-    // Animate form out and welcome screen in
-    const currentForm = document.querySelector('.form-container:not(.hidden)');
-    if (currentForm) {
-        currentForm.style.animation = 'slideIn 0.3s ease-out reverse';
-        setTimeout(() => {
-            currentForm.classList.add('hidden');
-            userManual.classList.remove('hidden');
-            userManual.style.animation = 'fadeIn 0.3s ease-out';
-        }, 300);
-    }
-}
+// Initial render
+renderTickets(tickets);
 
-// Attach form submission handlers
-document.querySelector('#ticket-form form').addEventListener('submit', e => handleFormSubmission(e, 'TK'));
-document.querySelector('#incident-form form').addEventListener('submit', e => handleFormSubmission(e, 'IN'));
+// Close modal when clicking outside
+window.addEventListener('click', (e) => {
+    if (e.target === modal) {
+        modal.classList.remove('active');
+    }
+});
 
-// Notification system
-function showNotification(message, type = 'success') {
-    const notification = document.createElement('div');
-    notification.className = `notification ${type}`;
-    notification.style.cssText = `
-        position: fixed;
-        bottom: 20px;
-        right: 20px;
-        padding: 1rem 1.5rem;
-        border-radius: 8px;
-        background-color: ${type === 'success' ? 'var(--success-color)' : 'var(--danger-color)'};
-        color: white;
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        transform: translateY(100px);
-        transition: transform 0.3s ease-out;
-        z-index: 1000;
-    `;
-    notification.textContent = message;
-    
-    document.body.appendChild(notification);
-    requestAnimationFrame(() => {
-        notification.style.transform = 'translateY(0)';
+// Navigation functionality
+const navButtons = document.querySelectorAll('.nav-btn');
+navButtons.forEach(button => {
+    button.addEventListener('click', () => {
+        // Add navigation logic here
+        console.log(`Navigating to ${button.textContent}`);
     });
-    
-    setTimeout(() => {
-        notification.style.transform = 'translateY(100px)';
-        setTimeout(() => notification.remove(), 300);
-    }, 3000);
+});
+
+// Notification system (sample)
+function updateNotifications(count) {
+    const badge = document.querySelector('.badge');
+    badge.textContent = count;
+    badge.style.display = count > 0 ? 'block' : 'none';
 }
 
-// Initialize
-displayTickets();
+// Update notifications periodically (sample)
+setInterval(() => {
+    const randomCount = Math.floor(Math.random() * 5);
+    updateNotifications(randomCount);
+}, 30000);

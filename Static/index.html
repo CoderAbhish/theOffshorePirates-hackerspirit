@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Modern Support Portal</title>
+    <title>Instructor Dashboard</title>
     <link rel="stylesheet" href="styles.css">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.0/chart.min.js"></script>
 </head>
 <body class="light-mode">
     <nav class="navbar">
@@ -17,7 +17,7 @@
                 <button class="nav-btn arena-btn">Arena</button>
             </div>
             <div class="nav-right">
-                <button id="theme-toggle" class="theme-toggle" aria-label="Toggle theme">
+                <button class="theme-toggle" aria-label="Toggle theme">
                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <circle cx="12" cy="12" r="5"/>
                         <path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/>
@@ -31,174 +31,102 @@
             </div>
         </div>
     </nav>
-    <div class="app-container">
-        <!-- Sidebar -->
-        <aside class="sidebar">
-            <div class="logo">
-                <i class="fas fa-headset"></i>
-                <h1>Support</h1>
-            </div>
-            
-            <div class="ticket-actions">
-                <button id="raise-ticket" class="action-btn primary">
-                    <i class="fas fa-plus-circle"></i>
-                    New Ticket
-                </button>
-                <button id="raise-incident" class="action-btn secondary">
-                    <i class="fas fa-exclamation-circle"></i>
-                    New Incident
-                </button>
-            </div>
 
-            <div class="tickets-list">
-                <h2>Recent Tickets</h2>
-                <div class="ticket-items" id="tickets-list">
-                    <!-- Tickets will be inserted here by JavaScript -->
+    <div class="container">
+        <!-- Profile Section -->
+        <section class="profile-section card">
+            <h3>Your Profile</h3>
+            <div class="profile-container">
+                <div class="profile-image">
+                    <img src="image.png" alt="Profile Picture">
                 </div>
-            </div>
-            
-            
-        </aside>
-
-        <!-- Main Content -->
-        <main class="main-content">
-            <!-- Welcome Screen -->
-            <div id="user-manual" class="welcome-screen">
-                <div class="welcome-content">
-                    <div class="illustration">
-                        <img src="image.jpg" alt="Support Team">
-                    </div>
-                    <h2>How can we help you today?</h2>
-                    <div class="help-options">
-                        <div class="help-card" onclick="document.getElementById('raise-ticket').click()">
-                            <i class="fas fa-book"></i>
-                            <h3>Course Support</h3>
-                            <p>Get help with course materials, assignments, and doubts</p>
-                        </div>
-                        <div class="help-card" onclick="document.getElementById('raise-incident').click()">
-                            <i class="fas fa-cog"></i>
-                            <h3>Administrative Help</h3>
-                            <p>Resolution for payment, profile, and technical issues</p>
-                        </div>
+                <div class="profile-details">
+                    <p><strong>Name:</strong> Golu</p>
+                    <p><strong>Role:</strong> T.A</p>
+                    <p><strong>Ticket Solved :</strong> 1,234</p>
+                    <div class="rating">
+                        <strong>Rating:</strong>
+                        <span class="stars">★★★★★</span>
+                        <span class="rating-value">(4.9/5)</span>
                     </div>
                 </div>
             </div>
+        </section>
 
-            <!-- Ticket Form -->
-            <div id="ticket-form" class="form-container hidden">
-                <h2>Create New Ticket</h2>
-                <form>
-                    <div class="form-grid">
-                        <div class="form-group">
-                            <label>Course</label>
-                            <select name="course" required>
-                                <option value="">Select Course</option>
-                                <option value="stats1">Stats 1</option>
-                                <option value="maths1">Maths 1</option>
-                                <option value="python">Python</option>
-                                <option value="ct">CT</option>
-                            </select>
-                        </div>
-
-                        <div class="form-group">
-                            <label>Category</label>
-                            <select name="category" required>
-                                <option value="">Select Category</option>
-                                <option value="ga">GA</option>
-                                <option value="pa">PA</option>
-                                <option value="activity">Activity Question</option>
-                                <option value="pyq">PYQ</option>
-                                <option value="live">Live Session Doubt</option>
-                            </select>
-                        </div>
-
-                        <div class="form-group">
-                            <label>Priority</label>
-                            <select name="priority" required>
-                                <option value="">Select Priority</option>
-                                <option value="p1">P1 (Highest)</option>
-                                <option value="p2">P2</option>
-                                <option value="p3">P3</option>
-                                <option value="p4">P4 (Lowest)</option>
-                            </select>
-                        </div>
-
-                        <div class="form-group full-width">
-                            <label>Description</label>
-                            <textarea name="description" placeholder="Describe your doubt in detail..." required></textarea>
-                        </div>
-
-                        <div class="form-group full-width">
-                            <div class="file-upload">
-                                <label for="attachment">
-                                    <i class="fas fa-paperclip"></i>
-                                    <span>Attach Screenshots (if any)</span>
-                                </label>
-                                <input type="file" id="attachment" accept="image/*">
-                                <span id="file-name"></span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="form-actions">
-                        <button type="button" class="btn secondary" onclick="showUserManual()">Cancel</button>
-                        <button type="submit" class="btn primary">Submit Ticket</button>
-                    </div>
-                </form>
+        <!-- Tickets Overview Section -->
+        <section class="tickets-overview card">
+            <div class="overview-header">
+                <h3>Tickets Overview</h3>
+                <div class="header-actions">
+                    <button id="filterBtn" class="filter-btn">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M22 3H2l8 9.46V19l4 2v-8.54L22 3z"/>
+                        </svg>
+                        Filter
+                    </button>
+                </div>
             </div>
 
-            <!-- Incident Form -->
-            <div id="incident-form" class="form-container hidden">
-                <h2>Report an Incident</h2>
-                <form>
-                    <div class="form-grid">
-                        <div class="form-group">
-                            <label>Category</label>
-                            <select name="category" required>
-                                <option value="">Select Category</option>
-                                <option value="payment">Payment Issue</option>
-                                <option value="admit-card">Admit Card</option>
-                                <option value="personal-details">Change Personal Details</option>
-                                <option value="profile-pic">Change Profile Picture</option>
-                            </select>
-                        </div>
-
-                        <div class="form-group">
-                            <label>Priority</label>
-                            <select name="priority" required>
-                                <option value="">Select Priority</option>
-                                <option value="p1">P1 (Highest)</option>
-                                <option value="p2">P2</option>
-                                <option value="p3">P3</option>
-                                <option value="p4">P4 (Lowest)</option>
-                            </select>
-                        </div>
-
-                        <div class="form-group full-width">
-                            <label>Description</label>
-                            <textarea name="description" placeholder="Describe the issue in detail..." required></textarea>
-                        </div>
-
-                        <div class="form-group full-width">
-                            <div class="file-upload">
-                                <label for="incident-attachment">
-                                    <i class="fas fa-paperclip"></i>
-                                    <span>Attach Files (if any)</span>
-                                </label>
-                                <input type="file" id="incident-attachment" accept="image/*">
-                                <span id="incident-file-name"></span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="form-actions">
-                        <button type="button" class="btn secondary" onclick="showUserManual()">Cancel</button>
-                        <button type="submit" class="btn primary">Submit Report</button>
-                    </div>
-                </form>
+            <!-- Filter Panel -->
+            <div id="filterPanel" class="filter-panel">
+                <div class="filter-section">
+                    <h4>Priority</h4>
+                    <label><input type="checkbox" value="p1"> P1 (Highest)</label>
+                    <label><input type="checkbox" value="p2"> P2</label>
+                    <label><input type="checkbox" value="p3"> P3</label>
+                    <label><input type="checkbox" value="p4"> P4</label>
+                </div>
+                <div class="filter-section">
+                    <h4>Status</h4>
+                    <label><input type="checkbox" value="open"> Open</label>
+                    <label><input type="checkbox" value="in-progress"> In Progress</label>
+                    <label><input type="checkbox" value="resolved"> Resolved</label>
+                </div>
+                <div class="filter-section">
+                    <h4>Course</h4>
+                    <label><input type="checkbox" value="python"> Python</label>
+                    <label><input type="checkbox" value="stats"> Statistics</label>
+                    <label><input type="checkbox" value="math"> Mathematics</label>
+                </div>
+                <button class="apply-filters">Apply Filters</button>
             </div>
-        </main>
+
+            <div class="overview-table">
+                <div class="table-header">
+                    <div class="table-column">Ticket ID</div>
+                    <div class="table-column">Priority</div>
+                    <div class="table-column">Course</div>
+                    <div class="table-column">Status</div>
+                </div>
+                <div id="ticketsList" class="ticket-rows">
+                    <!-- Tickets will be populated by JavaScript -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Reply Modal -->
+        <div id="replyModal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3>Reply to Ticket <span id="ticketId"></span></h3>
+                    <button class="close-modal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <div class="ticket-details">
+                        <p class="ticket-query"></p>
+                        <div class="attachments"></div>
+                    </div>
+                    <div class="reply-form">
+                        <textarea id="replyText" placeholder="Type your response..."></textarea>
+                        <div class="form-actions">
+                            <button class="submit-reply">Submit Response</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
+
     <script src="script.js"></script>
 </body>
 </html>
