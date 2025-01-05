@@ -1,49 +1,90 @@
-import os
+from flask import Flask, request, jsonify
+import re
+import requests
 from dotenv import load_dotenv
-from langchain_chroma import Chroma
-from langchain_openai import OpenAIEmbeddings, ChatOpenAI
-from langchain_text_splitters import RecursiveCharacterTextSplitter
-from langchain_community.document_loaders import PyPDFLoader
-from langchain.chains import create_retrieval_chain
-from langchain.chains.combine_documents import create_stuff_documents_chain
-from langchain_core.prompts import ChatPromptTemplate
+from openai import OpenAI
 
 load_dotenv()
 
-file_path = "./Bot Docs.pdf"
-loader = PyPDFLoader(file_path)
+app = Flask(__name__)
 
-llm = ChatOpenAI(model="gpt-4o-mini", temperature= 0.3, top_p=0.2)
-docs = loader.load()
+client = OpenAI()
 
-embeddings = OpenAIEmbeddings(model="text-embedding-3-large")
-text_splitter = RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=200)
-splits = text_splitter.split_documents(docs)
-vectorstore = Chroma.from_documents(documents=splits, embedding=embeddings)
+def create_thread(user_message):
+    assistant_id = 'asst_Y9U0yZAQpnLblC62tsLsIHtW'
 
-retriever = vectorstore.as_retriever()
+    try:
+        thread_stream = client.beta.threads.create_and_run(
+            assistant_id=assistant_id,
+            thread={
+                "messages": [
+                {"role": "user", "content": user_message}
+                ]
+            },
+            stream=True
+        )
 
-system_prompt = (
-    "You are an assistant for clearing student doubts in IIT Madras BS Degree Program."
-    "Use the following pieces of retrieved context to answer "
-    "the question. Only if you don't know the answer, ask them to create"
-    "a ticket for their query and a support personnel will help out and for nothing else."
-    "Keep the answer concise, very simple for the students to understand and as small as possible."
-    "\n\n"
-    "{context}"
-)
+        for event in thread_stream:
+            if event.event == 'thread.message.completed':
+                response = event.data.content[0].text.value
+                output_stage_checking = re.search(r"Output Stage:(.*)", response, re.DOTALL)
+                if output_stage_checking:
+                    response = output_stage_checking.group(1).strip()
+                clean_response = re.sub(r"【\d+:\d+†[^】]*】", "", response)
+                output = {'conv_id': event.data.thread_id, 'response': clean_response}
+                return output
 
-prompt = ChatPromptTemplate.from_messages(
-    [
-        ("system", system_prompt),
-        ("human", "{input}"),
-    ]
-)
+    except Exception as e:
+        return {"error": str(e)}
 
+def submit_message(thread_id, user_message):
+    assistant_id = 'asst_Y9U0yZAQpnLblC62tsLsIHtW'
 
-question_answer_chain = create_stuff_documents_chain(llm, prompt)
-rag_chain = create_retrieval_chain(retriever, question_answer_chain)
+    try:
+        client.beta.threads.messages.create(
+            thread_id=thread_id, role="user", content=user_message
+        )
 
-results = rag_chain.invoke({"input": "Can i skip OPPE2 pass python?"})
+        message_stream = client.beta.threads.runs.create(
+            thread_id=thread_id,
+            assistant_id=assistant_id,
+            stream=True
+        )
 
-print(results['answer'])
+        for event in message_stream:
+            if event.event == 'thread.message.completed':
+                response = event.data.content[0].text.value
+                output_stage_checking = re.search(r"Output Stage:(.*)", response, re.DOTALL)
+                if output_stage_checking:
+                    response = output_stage_checking.group(1).strip()
+                clean_response = re.sub(r"【\d+:\d+†[^】]*】", "", response)
+                output = {'conv_id': event.data.thread_id, 'response': clean_response}
+                return output
+
+    except Exception as e:
+        return {"error": str(e)}
+
+@app.route('/api/thread/create', methods=['POST'])
+def create_thread_api():
+    data = request.get_json()
+
+    user_message = data.get("user_message")
+    if not user_message:
+        return jsonify({"error": "User message is required"}), 400
+
+    result = create_thread(user_message)
+    return jsonify(result)
+
+@app.route('/api/thread/<thread_id>/message', methods=['POST'])
+def submit_message_api(thread_id):
+    data = request.get_json()
+
+    user_message = data.get("user_message")
+    if not user_message:
+        return jsonify({"error": "Message is required"}), 400
+
+    result = submit_message(thread_id, user_message)
+    return jsonify(result)
+
+if __name__ == "__main__":
+    app.run(debug=True)
