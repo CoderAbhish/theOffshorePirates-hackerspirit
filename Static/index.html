@@ -3,11 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Instructor Dashboard</title>
+    <title>IITM BS Peer Connect</title>
     <link rel="stylesheet" href="styles.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.0/chart.min.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
 </head>
-<body class="light-mode">
+<body class="light-theme">
+    <!-- Updated Navigation -->
     <nav class="navbar">
         <div class="nav-container">
             <div class="nav-left">
@@ -32,97 +33,70 @@
         </div>
     </nav>
 
-    <div class="container">
-        <!-- Profile Section -->
-        <section class="profile-section card">
-            <h3>Your Profile</h3>
-            <div class="profile-container">
-                <div class="profile-image">
-                    <img src="image.png" alt="Profile Picture">
-                </div>
-                <div class="profile-details">
-                    <p><strong>Name:</strong> Golu</p>
-                    <p><strong>Role:</strong> T.A</p>
-                    <p><strong>Ticket Solved :</strong> 1,234</p>
-                    <div class="rating">
-                        <strong>Rating:</strong>
-                        <span class="stars">★★★★★</span>
-                        <span class="rating-value">(4.9/5)</span>
-                    </div>
-                </div>
-            </div>
-        </section>
+    <!-- Main Content -->
+    <main class="container">
+        <!-- View Toggle Buttons -->
+        <div class="view-toggle">
+            <button class="toggle-btn active" data-view="classmates">My Batch</button>
+            <button class="toggle-btn" data-view="all-students">All Students</button>
+        </div>
 
-        <!-- Tickets Overview Section -->
-        <section class="tickets-overview card">
-            <div class="overview-header">
-                <h3>Tickets Overview</h3>
-                <div class="header-actions">
-                    <button id="filterBtn" class="filter-btn">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M22 3H2l8 9.46V19l4 2v-8.54L22 3z"/>
-                        </svg>
-                        Filter
-                    </button>
-                </div>
+        <!-- Search and Filter Section -->
+        <div class="search-section">
+            <div class="search-bar">
+                <i class="fas fa-search search-icon"></i>
+                <input type="text" placeholder="Search by name or subject..." class="search-input">
             </div>
-
-            <!-- Filter Panel -->
-            <div id="filterPanel" class="filter-panel">
-                <div class="filter-section">
-                    <h4>Priority</h4>
-                    <label><input type="checkbox" value="p1"> P1 (Highest)</label>
-                    <label><input type="checkbox" value="p2"> P2</label>
-                    <label><input type="checkbox" value="p3"> P3</label>
-                    <label><input type="checkbox" value="p4"> P4</label>
-                </div>
-                <div class="filter-section">
-                    <h4>Status</h4>
-                    <label><input type="checkbox" value="open"> Open</label>
-                    <label><input type="checkbox" value="in-progress"> In Progress</label>
-                    <label><input type="checkbox" value="resolved"> Resolved</label>
-                </div>
-                <div class="filter-section">
-                    <h4>Course</h4>
-                    <label><input type="checkbox" value="python"> Python</label>
-                    <label><input type="checkbox" value="stats"> Statistics</label>
-                    <label><input type="checkbox" value="math"> Mathematics</label>
-                </div>
-                <button class="apply-filters">Apply Filters</button>
+            <div class="filters" id="filterContainer">
+                <!-- Filters will be shown/hidden based on view -->
             </div>
+        </div>
 
-            <div class="overview-table">
-                <div class="table-header">
-                    <div class="table-column">Ticket ID</div>
-                    <div class="table-column">Priority</div>
-                    <div class="table-column">Course</div>
-                    <div class="table-column">Status</div>
-                </div>
-                <div id="ticketsList" class="ticket-rows">
-                    <!-- Tickets will be populated by JavaScript -->
-                </div>
+        <!-- Student Cards Container -->
+        <div class="students-grid" id="studentsContainer">
+            <!-- Cards will be populated by JavaScript -->
+        </div>
+    </main>
+
+    <!-- Chat Request Modal -->
+    <div class="modal" id="chatModal">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <h2>Connect with <span id="studentName"></span></h2>
+            <div class="online-status" id="modalOnlineStatus">
+                <!-- Online status will be added here -->
             </div>
-        </section>
+            <textarea placeholder="Add a message to introduce yourself..." class="connection-message"></textarea>
+            <div class="modal-buttons">
+                <button class="send-request-btn">Send Chat Request</button>
+                <button class="linkedin-btn">
+                    <i class="fab fa-linkedin"></i> Connect on LinkedIn
+                </button>
+            </div>
+        </div>
+    </div>
 
-        <!-- Reply Modal -->
-        <div id="replyModal" class="modal">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h3>Reply to Ticket <span id="ticketId"></span></h3>
-                    <button class="close-modal">&times;</button>
+    <!-- Chat Interface Modal -->
+    <div class="modal" id="chatInterface">
+        <div class="modal-content chat-content">
+            <span class="close-modal">&times;</span>
+            <div class="chat-header">
+                <div class="chat-user-info">
+                    <span id="chatUserName"></span>
+                    <span class="online-indicator"></span>
                 </div>
-                <div class="modal-body">
-                    <div class="ticket-details">
-                        <p class="ticket-query"></p>
-                        <div class="attachments"></div>
-                    </div>
-                    <div class="reply-form">
-                        <textarea id="replyText" placeholder="Type your response..."></textarea>
-                        <div class="form-actions">
-                            <button class="submit-reply">Submit Response</button>
-                        </div>
-                    </div>
-                </div>
+                <button class="meet-request-btn">
+                    <i class="fas fa-video"></i> Request Meet
+                </button>
+            </div>
+            <div class="chat-messages" id="chatMessages">
+                <!-- Chat messages will be populated here -->
+            </div>
+            <div class="chat-input-area">
+                <textarea placeholder="Type your message..." class="chat-input"></textarea>
+                <button class="send-message-btn">
+                    <i class="fas fa-paper-plane"></i>
+                </button>
             </div>
         </div>
     </div>
